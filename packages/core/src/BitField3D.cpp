@@ -17,10 +17,13 @@ namespace ram {
 namespace core {
 
 BitField3D::BitField3D(size_t length, size_t width, size_t height)
-    : m_bitfield(length*width*height) // default length
+    : try{m_bitfield(length*width*height) // default length
     , m_length(length)
     , m_width(width)
     , m_height(height)
+    }catch(...){
+        
+    }
 {
 }
 
