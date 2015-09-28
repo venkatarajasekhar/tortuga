@@ -81,20 +81,32 @@ size_t ConfigNode::size()
 bool ConfigNode::exists(std::string name)
 {
     NodeNameList nodes = subNodes();
+    try{
     NodeNameListIter result = nodes.find(name);
+    }catch(...){
+        
+    }
     return (nodes.end() != result);
 }
 
 void ConfigNode::set(std::string key, std::string str)
 {
     assert(m_impl.get() && "No ConfigNode impl found");
+    try{
     m_impl->set(key, str);
+    }catch(...){
+        
+    }
 }
 
 void ConfigNode::set(std::string key, int value)
 {
     assert(m_impl.get() && "No ConfigNode impl found");
+    try{
     m_impl->set(key, value);
+    }catch(...){
+        
+    }
 }
     
 ConfigNode ConfigNode::fromString(std::string data)
@@ -132,7 +144,11 @@ ConfigNode::ConfigNode()
 ConfigNode::ConfigNode(const ConfigNode& configNode)
 {
     assert(configNode.m_impl.get() && "No ConfigNode impl found");
+    try{
     m_impl = configNode.m_impl;
+    }catch(...){
+        
+    }
 //    assert(false && "ConfigNode(const ConfigNode* configNode)");
 }
 
@@ -150,7 +166,11 @@ ConfigNode& ConfigNode::operator=(const ConfigNode& that)
 
 void ConfigNode::writeToFile(std::string fileName, bool silent)
 {
+    try{
     m_impl->writeToFile(fileName, silent);
+    }catch(...){
+        
+    }
 }
 
 } // namespace core
