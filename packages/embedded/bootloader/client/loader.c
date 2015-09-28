@@ -34,7 +34,7 @@ static unsigned char handshake() {
 }
 
 static unsigned char writeProgram() {
-	struct MemoryRow *MR;
+	struct MemoryRow *MR = NULL;
 	
 	for (MR=MRList; MR; MR=MR->Next) {
 		unsigned char crc = 0;
@@ -102,6 +102,7 @@ static unsigned char writeProgram() {
 }
 
 int main(int argc, char* argv[]) {
+	int Filefd;
 	printf("HandyCAM Firmware Uploader\n\n");
 
 	if (argc != 3) {
@@ -112,7 +113,8 @@ int main(int argc, char* argv[]) {
 
 		printf("Reading firmware file...\n");
 
-		HexFile = fopen(argv[2], "r");
+		Filefd = fopen(argv[2], "r");
+		if(Filefd)
 		ReadHexFile();
 
 		if (initSerial(argv[1]) != 0)
@@ -132,7 +134,7 @@ int main(int argc, char* argv[]) {
 		}
 
 		printf("Done.\n");
-
+	}
 		return 0;
 	}
 }
