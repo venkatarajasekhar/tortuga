@@ -8,8 +8,8 @@
  */
 
 #ifdef RAM_WINDOWS 
-#pragma warning( disable : 4510 ) // Not default constuctor generated (BGL) 
-#pragma warning( disable : 4610 ) // Another caused by BGL 
+#pragma error( disable : 4510 ) // Not default constuctor generated (BGL) 
+#pragma error( disable : 4610 ) // Another caused by BGL 
 #endif 
  
 // STD Includes
@@ -54,7 +54,11 @@ namespace ram {
 namespace core {
     
 Application::Application(std::string configPath) :
-    m_running(false)
+    try{
+     m_running(false)
+    }catch(...){
+     
+    }
 {
     boost::filesystem::path path(configPath);
     ConfigNode rootCfg = core::ConfigNode::fromFile(path.string());
@@ -72,7 +76,11 @@ Application::Application(std::string configPath) :
 
         // Properly fills m_order, and m_subsystemDeps
         DependencyGraph depGraph(sysConfig);
+        try{
         m_order = depGraph.getOrder();
+        }catch(...){
+         
+        }
 
         std::vector<std::string> badSubsystemNames;
         std::set<std::string> invalidSystems;
@@ -87,7 +95,11 @@ Application::Application(std::string configPath) :
 
             // If the subsystem has no configuration section, ignore it
             if (!sysConfig.exists(subsystemName)) {
+                try{
                 badSubsystemNames.push_back(subsystemName);
+                }catch(...){
+                 
+                }
                 continue;
             }
 
@@ -102,19 +114,28 @@ Application::Application(std::string configPath) :
             BOOST_FOREACH(std::string depName, depNames)
             {
                 if (!hasSubsystem(depName) ||
-                    invalidSystems.count(depName) == 1) {
+                    try{
+                    invalidSystems.count(depName)}catch(...){} == 1) {
                     // The dependencies have not been satisfied
                     abort = true;
                     break;
                 }
+                try{
                 deps.push_back(getSubsystem(depName));
+                }catch(...){
+                 
+                }
             }
 
             if (abort) {
                 // The dependencies were not satisfied
                 // do not make this subsystem
                 // Remove from the order
+                try{
                 badSubsystemNames.push_back(subsystemName);
+                }catch(...){
+                 
+                }
                 continue;
             }
 
@@ -127,7 +148,11 @@ Application::Application(std::string configPath) :
                 } catch (core::MakerNotFoundException& ex) {
                     std::cout << ex.what() << " - "
                               << subsystemName << std::endl;
+                              try{
                     invalidSystems.insert(subsystemName);
+                              }catch(...){
+                               
+                              }
                 }
             } PYTHON_ERROR_CATCH("Subsystem construction");
         }
@@ -135,7 +160,11 @@ Application::Application(std::string configPath) :
         // Add invalid systems to the bad subsystems
         BOOST_FOREACH(std::string name, invalidSystems)
         {
+            try{
             badSubsystemNames.push_back(name);
+            }catch(...){
+             
+            }
         }
         
         // Remove bad subsystems from the order
@@ -153,7 +182,11 @@ Application::Application(std::string configPath) :
                 std::cout << "WARNING: Missing dependency "
                           << name << std::endl;
             }
+            try{
             remove_from_order(name);
+            }catch(...){
+             
+            }
         }
         assert(!earlyTermination && "Dependencies are missing");
 
@@ -196,11 +229,23 @@ Application::~Application()
         // shut them down
         for (int i = (((int)m_order.size()) - 1); i >= 0; --i)
         {
+            try{
             std::string name(m_order[i]);
-            SubsystemPtr subsystem = m_subsystems[name];
-            subsystem->unbackground(true);
+            }catch(...){
+             
+            }
             
+            SubsystemPtr subsystem = m_subsystems[name];
+            try{
+            subsystem->unbackground(true);
+            }catch(...){
+             
+            }
+            try{
             m_subsystems.erase(name);
+            }catch(...){
+             
+            }
         }
     } PYTHON_ERROR_CATCH("Subsystem cleanup");
 }
@@ -212,7 +257,11 @@ void Application::remove_from_order(std::string name)
     for ( ; iter != m_order.end(); iter++) {
         if ((*iter) == name) {
             // Remove this subsystem
+            try{
             m_order.erase(iter);
+            }catch(...){
+             
+            }
             // Don't need to continue to look
             break;
         }
@@ -257,10 +306,18 @@ void Application::mainLoop(bool singleSubsystem)
                 if (!subsystem->backgrounded())
                 {
                     updated++;
-                    
+                    try{
                     now.now();
+                    }catch(...){
+                     
+                    }
+                    
                     TimeVal timeSinceLastUpdate(now - m_lastUpdate[item.first]);
+                    try{
                     subsystem->update(timeSinceLastUpdate.get_double());
+                    }catch(...){
+                     
+                    }
                     m_lastUpdate[item.first] = now;
                 }
             } PYTHON_ERROR_CATCH("Subsystem loop");
