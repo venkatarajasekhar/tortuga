@@ -28,5 +28,5 @@ struct ChipType SupportedChips[]=
  */
 int PortBase=0x3F8;
 struct ChipType *WhichChip=SupportedChips;
-struct MemoryRow *MRList=0;
-FILE *HexFile=0;
+struct MemoryRow *MRList=NULL;
+FILE *HexFile= NULL;
