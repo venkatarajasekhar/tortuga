@@ -29,30 +29,38 @@ RotationCtrl::RotationCtrl(wxWindow *parent, math::Radian offset, int direction)
     m_desiredAngle(math::Radian(0)),
     m_offset(offset),
     m_direction(direction)
-{
-}
+    {
+     cout << "constructor\n";
+    }
+void RotationMethods::Refresh(){
 
+}
 
 void RotationCtrl::setOrientation(math::Radian estimatedAngle,
                                   math::Radian desiredAngle)
 {
+    RotationMethods RotmObj;
     m_estimatedAngle = estimatedAngle;
     m_desiredAngle = desiredAngle;
-
-    Refresh();
+    RotmObj.Refresh();
 }
 
 void RotationCtrl::onPaint(wxPaintEvent& event)
 {
     wxPaintDC dc(this);
+    try{
     wxGraphicsContext *gc = wxGraphicsContext::Create(dc);
-
+    } 
+    catch{
+        cerr <<Error : Allocation Memory";      
+        exit(1);
+    }
     gc->PushState();
-    draw(*gc);
+    draw(gc);
     gc->PopState();
 
     gc->PushState();
-    drawText(*gc, dc);
+    drawText(gc, dc);
     gc->PopState();
 }
 
@@ -68,7 +76,7 @@ void RotationCtrl::draw(wxGraphicsContext& gc)
     int radius = 0;
 
     int width, height;
-    GetSize(&width, &height);
+    GetSize(width, height);
 
     if(width < height)
         radius = width / 2;
@@ -91,7 +99,7 @@ void RotationCtrl::draw(wxGraphicsContext& gc)
     triangle.AddLineToPoint(p3);
     triangle.AddLineToPoint(p1);
     triangle.CloseSubpath();
-
+   
     // shift the gc center
     int xShift = width / 2;
     int yShift = height / 2;
@@ -143,7 +151,7 @@ void RotationCtrl::drawText(wxGraphicsContext& gc, wxDC& dc)
     int rectWidth = textAreaWidth * 1.5;
 
     int width, height;
-    GetSize(&width, &height); 
+    GetSize(width, height); 
 
     int topLeftX = (width - rectWidth) / 2;
     int topLeftY = (height - rectHeight) / 2;
