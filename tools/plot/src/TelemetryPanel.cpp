@@ -48,19 +48,41 @@ TelemetryPanel::TelemetryPanel(wxWindow* parent, core::EventHubPtr eventHub) :
     m_info.Name(wxT("Telemetry Panel"));
 
     SetMinSize(wxSize(240, 240));
-
+    try{
     wxSizer *overallBox = new wxBoxSizer(wxVERTICAL);
+    }catch(bad_alloc ex) {
+        cerr <<"Error: Memory Allocation ";      
+        exit(1);
+    }
+        try{
     wxSizer *topBox = new wxBoxSizer(wxHORIZONTAL);
+        }catch(bad_alloc ex) {
+        cerr <<"Error: Memory Allocation ";      
+        exit(1);
+    }
+        try{
     wxSizer *orientationPanelBox = new wxBoxSizer(wxHORIZONTAL);
+    }catch(bad_alloc ex) {
+        cerr <<"Error: Memory Allocation ";      
+        exit(1);
+    }
 
     overallBox->Add(topBox, 2, wxEXPAND | wxALL, 2);
     overallBox->Add(orientationPanelBox, 1, wxEXPAND | wxCENTER | wxALL, 2);
-
+    try{
     OrientationTelemetryPanel *orientationPanel = new OrientationTelemetryPanel(this, eventHub);
+        }catch(bad_alloc ex) {
+        cerr <<"Error: Memory Allocation ";      
+        exit(1);
+    }
     orientationPanel->Update();
     orientationPanelBox->Add(orientationPanel, 1, wxEXPAND | wxCENTER | wxALL, 2);
-
+    try{
     EventRatePanel *eventRatePanel = new EventRatePanel(this, eventHub);
+    }catch(bad_alloc ex) {
+        cerr <<"Error: Memory Allocation ";      
+        exit(1);
+    }
     topBox->Add(eventRatePanel, 1, wxEXPAND | wxCENTER | wxALL, 2);
     
     math::NumericEventPtr event = math::NumericEventPtr(new math::NumericEvent);
@@ -80,13 +102,42 @@ OrientationTelemetryPanel::OrientationTelemetryPanel(wxWindow *parent,
             wxDefaultSize, wxTAB_TRAVERSAL,
             wxT("Orientation Telemetry"))
 {
-    wxSizer *overallSizer = new wxBoxSizer(wxVERTICAL);
+        try{
+        wxSizer *overallSizer = new wxBoxSizer(wxVERTICAL);
+        }catch(bad_alloc ex) {
+        cerr <<"Error: Memory Allocation ";      
+        exit(1);
+    }
+        try{
     wxSizer *rotationControls = new wxBoxSizer(wxHORIZONTAL);
+}catch(bad_alloc ex) {
+        cerr <<"Error: Memory Allocation ";      
+        exit(1);
+    }
+        try{
     wxSizer *labels = new wxBoxSizer(wxHORIZONTAL);
-    
+}catch(bad_alloc ex) {
+        cerr <<"Error: Memory Allocation ";      
+        exit(1);
+    }
+    try{
     m_roll = new RotationCtrl(this);
+        }catch(bad_alloc ex) {
+        cerr <<"Error: Memory Allocation ";      
+        exit(1);
+    }
+    try{    
     m_pitch = new RotationCtrl(this, math::Degree(90));
+   }catch(bad_alloc ex) {
+        cerr <<"Error: Memory Allocation ";      
+        exit(1);
+    }
+    try{
     m_yaw = new RotationCtrl(this);
+    }catch(bad_alloc ex) {
+        cerr <<"Error: Memory Allocation ";      
+        exit(1);
+    }
 
     m_roll->setOrientation(math::Degree(0), math::Degree(0));
     m_pitch->setOrientation(math::Degree(0), math::Degree(0));
@@ -99,10 +150,24 @@ OrientationTelemetryPanel::OrientationTelemetryPanel(wxWindow *parent,
     rotationControls->Add(m_roll, 2, wxSHAPED | wxALIGN_CENTER | wxALL, border);
     rotationControls->Add(m_pitch, 2, wxSHAPED | wxALIGN_CENTER | wxALL, border);
     rotationControls->Add(m_yaw, 2, wxSHAPED | wxALIGN_CENTER | wxALL, border);
-
+    try{
     wxStaticText *rollLabel = new wxStaticText(this, wxID_ANY, wxT("Roll"));
+        }catch(bad_alloc ex) {
+        cerr <<"Error: Memory Allocation ";      
+        exit(1);
+    }
+        try{
     wxStaticText *pitchLabel = new wxStaticText(this, wxID_ANY, wxT("Pitch"));
+}catch(bad_alloc ex) {
+        cerr <<"Error: Memory Allocation ";      
+        exit(1);
+    }
+        try{
     wxStaticText *yawLabel = new wxStaticText(this, wxID_ANY, wxT("Yaw"));
+}catch(bad_alloc ex) {
+        cerr <<"Error: Memory Allocation ";      
+        exit(1);
+    }
     
     wxColour labelColour = wxColour(wxT("BLACK"));
     rollLabel->SetForegroundColour(labelColour);
