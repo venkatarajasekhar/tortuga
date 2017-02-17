@@ -49,4 +49,17 @@ private:
     int m_direction;
 };
 
+class RotationMethods:public RotationCtrl{
+public:
+     drawText(gc, dc);
+     Refresh();
+
+
+}
+
+
+
+
+
+
 #endif // RAM_TOOLS_PLOT_ROTATIONCTRL_H
