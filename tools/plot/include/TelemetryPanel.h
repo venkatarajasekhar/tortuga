@@ -64,18 +64,7 @@ class EventRatePanel : public wxGrid
 {
 public:
     EventRatePanel(wxWindow *parent, core::EventHubPtr eventHub);
-    ~EventRatePanel();
-
-    struct EventData
-    {
-        wxString name;
-        int row;
-        math::AveragingFilter<double, 10> filter;
-        double timeStamp;
-        bool active;
-        int timesInactive;
-    };
-    
+    ~EventRatePanel();    
     void handler(core::EventPtr event);
     void redraw();
 
@@ -88,5 +77,21 @@ private:
     time_t m_lastUpdate;
     time_t m_updatePeriod;
 };
+class EventData : public EventRatePanel
+    {   
+        private:
+        wxString name;
+        int row;
+        math::AveragingFilter<double, 10> filter;
+        double timeStamp;
+        bool active;
+        int timesInactive;
+    };
+
+
+
+
+
+
 
 #endif // RAM_TOOLS_TELEMETRYPANEL
